@@ -1,3 +1,16 @@
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local Favorite_Item = ReplicatedStorage.GameEvents.Favorite_Item
+
+for _, item in ipairs(LocalPlayer.Backpack:GetChildren()) do
+    if item:IsA("Tool") and item:GetAttribute("d") == true then
+        Favorite_Item:FireServer(item)
+        task.wait(0
+)
+    end
+end
+
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
