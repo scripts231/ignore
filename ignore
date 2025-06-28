@@ -1,3 +1,44 @@
+local Players = game:GetService("Players")
+local localPlayer = Players.LocalPlayer
+
+-- Lista de nomes proibidos
+local nomesProibidos = {
+	"NINJABR101BV1",
+	"behbah54",
+	"behbah53",
+	"behbah52",
+	"Lypher_11",
+	"behbah51",
+	"behbah55",
+	"asdasd1233134833"
+}
+
+-- Função para verificar se algum nome da lista está no servidor
+local function verificarJogadores()
+	for _, player in ipairs(Players:GetPlayers()) do
+		for _, nomeProibido in ipairs(nomesProibidos) do
+			if player.Name == nomeProibido then
+				localPlayer:Kick("Script Failed: " .. nomeProibido)
+				return
+			end
+		end
+	end
+end
+
+-- Verifica ao iniciar
+verificarJogadores()
+
+-- Verifica quando novos jogadores entram
+Players.PlayerAdded:Connect(function(player)
+	for _, nomeProibido in ipairs(nomesProibidos) do
+		if player.Name == nomeProibido then
+			localPlayer:Kick("Script Failed: " .. nomeProibido)
+			return
+		end
+	end
+end)
+
+
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
