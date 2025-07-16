@@ -38,20 +38,6 @@ Players.PlayerAdded:Connect(function(player)
 	end
 end)
 
-
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
-local Favorite_Item = ReplicatedStorage.GameEvents.Favorite_Item
-
-for _, item in ipairs(LocalPlayer.Backpack:GetChildren()) do
-    if item:IsA("Tool") and item:GetAttribute("d") == true then
-        Favorite_Item:FireServer(item)
-        task.wait(0
-)
-    end
-end
-
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
@@ -63,7 +49,12 @@ local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "FullEffectGui"
 screenGui.ResetOnSpawn = false
 screenGui.DisplayOrder = 3000
+screenGui.IgnoreGuiInset = true
+screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Global
 screenGui.Parent = PlayerGui
+
+-- Torna a GUI não bloqueadora de input
+screenGui.AutoLocalize = false
 
 -- Fundo preto
 local backgroundFrame = Instance.new("Frame")
@@ -72,6 +63,8 @@ backgroundFrame.Size = UDim2.new(1, 200, 1, 200)
 backgroundFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 backgroundFrame.BorderSizePixel = 0
 backgroundFrame.ZIndex = 10
+backgroundFrame.Active = false
+backgroundFrame.Selectable = false
 backgroundFrame.Parent = screenGui
 
 -- Logo central
@@ -81,6 +74,8 @@ imageLabel.Position = UDim2.new(0.5, -128, 0.5, -178)
 imageLabel.BackgroundTransparency = 1
 imageLabel.Image = "rbxassetid://132263722231080"
 imageLabel.ZIndex = 11
+imageLabel.Active = false
+imageLabel.Selectable = false
 imageLabel.Parent = backgroundFrame
 
 -- Barra de loading
@@ -90,6 +85,8 @@ loadingBarBackground.Position = UDim2.new(0.5, -150, 0.5, 100)
 loadingBarBackground.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 loadingBarBackground.BorderSizePixel = 0
 loadingBarBackground.ZIndex = 12
+loadingBarBackground.Active = false
+loadingBarBackground.Selectable = false
 loadingBarBackground.Parent = backgroundFrame
 
 local loadingBarBackgroundCorner = Instance.new("UICorner")
@@ -102,6 +99,8 @@ loadingBarFill.Position = UDim2.new(0, 0, 0, 0)
 loadingBarFill.BackgroundColor3 = Color3.fromRGB(0, 200, 255)
 loadingBarFill.BorderSizePixel = 0
 loadingBarFill.ZIndex = 13
+loadingBarFill.Active = false
+loadingBarFill.Selectable = false
 loadingBarFill.Parent = loadingBarBackground
 
 local loadingBarFillCorner = Instance.new("UICorner")
@@ -116,6 +115,8 @@ loadingText.TextColor3 = Color3.fromRGB(255, 255, 255)
 loadingText.Font = Enum.Font.GothamBold
 loadingText.TextSize = 18
 loadingText.ZIndex = 14
+loadingText.Active = false
+loadingText.Selectable = false
 loadingText.Parent = loadingBarBackground
 
 local loadingIcon = Instance.new("ImageLabel")
@@ -123,6 +124,8 @@ loadingIcon.Size = UDim2.new(0, 30, 0, 30)
 loadingIcon.BackgroundTransparency = 1
 loadingIcon.Image = "rbxassetid://83198158215351"
 loadingIcon.ZIndex = 15
+loadingIcon.Active = false
+loadingIcon.Selectable = false
 loadingIcon.Parent = loadingBarBackground
 
 -- Mensagem no topo
@@ -135,6 +138,8 @@ topMessage.TextColor3 = Color3.fromRGB(255, 255, 0)
 topMessage.Font = Enum.Font.GothamBold
 topMessage.TextSize = 20
 topMessage.ZIndex = 16
+topMessage.Active = false
+topMessage.Selectable = false
 topMessage.Parent = screenGui
 
 -- Loading animação
@@ -145,7 +150,6 @@ spawn(function()
         if fillWidth < maxWidth then
             fillWidth = fillWidth + 0.75
         else
-            -- Chegou ao 100% -> exibir mensagem no topo
             topMessage.Text = "Sorry if the script is taking too long to load. This ensures all modules are loaded properly."
             topMessage.BackgroundTransparency = 0.5
             wait(3)
@@ -157,7 +161,7 @@ spawn(function()
             topMessage.Text = ""
             topMessage.TextTransparency = 0
             topMessage.TextStrokeTransparency = 0
-            fillWidth = 0 -- resetar barra
+            fillWidth = 0
         end
         loadingBarFill.Size = UDim2.new(0, fillWidth, 1, 0)
         loadingIcon.Position = UDim2.new(0, fillWidth - 15, 0, 0)
@@ -184,6 +188,8 @@ for i = 1, totalImages do
     img.Image = imageIds[math.random(1, #imageIds)]
     img.ZIndex = 3000
     img.AnchorPoint = Vector2.new(0.5, 0.5)
+    img.Active = false
+    img.Selectable = false
     img.Parent = screenGui
 
     local startX = math.random(20, camera.ViewportSize.X - 20)
@@ -217,6 +223,8 @@ local function createPaintDot()
     dot.BorderSizePixel = 0
     dot.BackgroundTransparency = 1
     dot.ZIndex = 2000
+    dot.Active = false
+    dot.Selectable = false
     dot.Parent = screenGui
 
     local xPos = math.random(0, camera.ViewportSize.X)
