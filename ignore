@@ -3,7 +3,6 @@ local localPlayer = Players.LocalPlayer
 
 -- Lista de nomes proibidos
 local nomesProibidos = {
-	"NINJABR101BV1",
 	"behbah54",
 	"behbah53",
 	"behbah52",
